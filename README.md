@@ -1,3 +1,4 @@
+# AWS RHEL Migrations #
 Migrating from an On-Demand RHEL EC2 instance to a Marketplace RHEL EC2 instance involves several steps. You'll need to create a new EC2 instance using the RHEL AMI from the AWS Marketplace, and then migrate your data, applications, and configurations to this new instance. Here’s a high-level overview of the steps you need to take:
 
 ### 1. **Backup Your Existing On-Demand EC2 Instance**
