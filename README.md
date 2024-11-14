@@ -22,18 +22,18 @@ Before starting the migration, it's important to create a backup of your current
 ### 2. **Launch a New EC2 Instance Using the RHEL Marketplace AMI**
 Now, you need to launch a new EC2 instance using the RHEL AMI from the AWS Marketplace.
 
-1. **Go to the AWS Marketplace:**
+- **Go to the AWS Marketplace:**
    - Visit the [AWS Marketplace](https://aws.amazon.com/marketplace) and search for Red Hat Enterprise Linux (RHEL) AMIs.
 
-2. **Select the Appropriate RHEL AMI:**
+- **Select the Appropriate RHEL AMI:**
    - Choose the version of RHEL that you want to use for the new instance (e.g., RHEL 8.x or RHEL 9.x).
    - Make sure to select an AMI with the desired configuration (e.g., instance size, region).
 
-3. **Launch the Instance:**
+- **Launch the Instance:**
    - Follow the usual process to launch an EC2 instance, including choosing the instance type, configuring security groups, selecting storage, and setting up key pairs.
    - Make sure that the instance is launched in the same VPC and subnet as your original instance, or that you have network connectivity if they are in different VPCs.
 
-4. **Ensure Proper Licensing:**
+- **Ensure Proper Licensing:**
    - The Marketplace AMI for RHEL will generally include licensing for the instance, but make sure you check the licensing terms and costs associated with the RHEL AMI.
    
 ### 3. **Migrate Your Data, Applications, and Configurations**
