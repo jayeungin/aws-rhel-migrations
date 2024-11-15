@@ -40,20 +40,20 @@ Snapshot, snapshot, snapshot before remounting the EBS. This should be the prefe
    1. Mount the snapshot to the EBS volume from your old EC2 instance.
    2. Mount the volume and any additional data over to the new instance as needed.
 - **Using Amazon S3**
-1. Copy your data from the old EC2 instance to an S3 bucket:
-   ```bash
-   aws s3 cp /path/to/data s3://your-bucket-name/ --recursive
-   ```
-2. Download the data from S3 to your new EC2 instance:
-   ```bash
-   aws s3 cp s3://your-bucket-name/ /path/to/destination/ --recursive
-   ```
+   1. Copy your data from the old EC2 instance to an S3 bucket:
+      ```bash
+      aws s3 cp /path/to/data s3://your-bucket-name/ --recursive
+      ```
+   2. Download the data from S3 to your new EC2 instance:
+      ```bash
+      aws s3 cp s3://your-bucket-name/ /path/to/destination/ --recursive
+      ```
 - **Using Rsync or SCP for File Transfer**
-  1. **Install `rsync` or use `scp`** on both the source and destination instances.
-  2. **Transfer data** from the old EC2 instance to the new one:
-   ```bash
-   rsync -avz -e ssh /path/to/data/ user@new-instance-ip:/path/to/destination/
-   ```
+   1. **Install `rsync` or use `scp`** on both the source and destination instances.
+   2. **Transfer data** from the old EC2 instance to the new one:
+      ```bash
+      rsync -avz -e ssh /path/to/data/ user@new-instance-ip:/path/to/destination/
+      ```
 
 ### 5. **Test the New EC2 Instance**
 Once the snapshot(s) are mounted and networking is set up, test the new EC2 instance to ensure it is functioning properly. Verify that all services are running, and that the applications are configured correctly.
@@ -66,14 +66,7 @@ Once you're confident that the new instance is running as expected, you can safe
 1. Terminate the old instance from the EC2 Console.
 2. Optionally delete any old snapshots or AMIs if they are no longer needed.
 
-### 7. **Cost Considerations**
-- Keep in mind that moving to an EC2 Marketplace instance may change your billing model. The Marketplace instances may involve different pricing models for licensing, and you should be aware of those costs.
-  
-   **On-Demand vs. Marketplace:**  
-   - **On-Demand** pricing: You pay hourly or per second for the compute usage, plus the cost of the RHEL subscription (which is often separate).
-   - **Marketplace** pricing: Some marketplace AMIs bundle the cost of the RHEL license into the hourly or usage-based cost.
-
-## Automated Summary##
+## Automated Steps with Ansible ##
 This playbook duplicates an EC2 instance with EBS snapshot, remount, tag copy, and IP assignment.
 
 ### Pre-requisites
