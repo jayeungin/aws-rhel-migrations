@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    instance_id: i-00000000000000000 ### Instance ID here ###
+    source_instance_id: i-00000000000000000 ### Instance ID here ###
     new_ami_id: ami-0011223344 ### RHEL CPPO AMI ID ###
     region: us-east-1 ### Region ###
   collections:
@@ -14,7 +14,7 @@
     - name: Gather info about a running EC2 instance using instance-id and store as them as variables
       amazon.aws.ec2_instance_info:
         instance_ids:
-          - "{{ instance_id }}"
+          - "{{ source_instance_id }}"
         region: "{{ region }}"
       register: old_ec2_info
 
@@ -30,14 +30,14 @@
     - name: Create a new EC2 instance using a different ami and matching instance info as the running EC2
       amazon.aws.ec2_instance:
         image_id: "{{ new_ami_id }}"
-        instance_id: "{{ instance_id }}"
+        instance_id: "{{ source_instance_id }}"
         key_name: "{{ old_ec2_info.instances[0].key_name }}"        
         instance_type: "{{ old_ec2_info.instances[0].instance_type }}"
         region: "{{ old_ec2_info.instances[0].region }}"
         availability_zone: "{{ old_ec2_info.instances[0].availability_zone }}"
         security_groups: "{{ old_ec2_info.instances[0].security_groups }}"
         instance_tags:
-          Name: "Duplicate-{{ instance_id }}"
+          Name: "CPPO-Copy-{{ instance_id }}"
           Environment: "{{ old_ec2_info.instances[0].tags.Environment | default('Unknown') }}"
         wait: true
         volumes:
@@ -46,6 +46,16 @@
             volume_size: 10
             delete_on_termination: true
       register: new_ec2_info
+
+    - name: Assign source networking to the new EC2 instance
+      amazon.aws.ec2_network_interface:
+        region: "{{ old_ec2_info.instances[0].region }}"
+        instance_id: "{{ new_ec2_info.instances[0].id }}"
+        private_ip: "{{ old_ec2_info.instances[0].private_ip }}"
+        subnet_id: "{{ old_ec2_info.instances[0].subnet_id }}"  # Ensure subnet_id is correct
+        associate_public_ip: no  # Private IP only
+        state: present
+      register: eni
 
     - name: Turn off the original EC2
       amazon.aws.ec2_instance:
