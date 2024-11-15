@@ -35,11 +35,11 @@ Now, you need to launch a new EC2 instance using the RHEL AMI from the AWS Marke
 
 ### 4. **Migrate Your Data, Applications, and Configurations**
 Once your new RHEL EC2 instance is running, you need to transfer your data and application configurations from the old On-Demand instance to the new Marketplace instance. This can be done in several ways:
-- #### **Using Amazon Elastic Block Store (EBS)**
+- **Using Amazon Elastic Block Store (EBS)**
 Snapshot, snapshot, snapshot before remounting the EBS. This should be the preferred method, but admins should still ensure the volumes attached without issues.
    1. Mount the snapshot to the EBS volume from your old EC2 instance.
    2. Mount the volume and any additional data over to the new instance as needed.
-- #### **Using Amazon S3**
+- **Using Amazon S3**
 1. Copy your data from the old EC2 instance to an S3 bucket:
    ```bash
    aws s3 cp /path/to/data s3://your-bucket-name/ --recursive
@@ -48,12 +48,12 @@ Snapshot, snapshot, snapshot before remounting the EBS. This should be the prefe
    ```bash
    aws s3 cp s3://your-bucket-name/ /path/to/destination/ --recursive
    ```
-   #### **Using Rsync or SCP for File Transfer**
-   1. **Install `rsync` or use `scp`** on both the source and destination instances.
-   2. **Transfer data** from the old EC2 instance to the new one:
-      ```bash
-      rsync -avz -e ssh /path/to/data/ user@new-instance-ip:/path/to/destination/
-      ```
+- **Using Rsync or SCP for File Transfer**
+  1. **Install `rsync` or use `scp`** on both the source and destination instances.
+  2. **Transfer data** from the old EC2 instance to the new one:
+   ```bash
+   rsync -avz -e ssh /path/to/data/ user@new-instance-ip:/path/to/destination/
+   ```
 
 ### 5. **Test the New EC2 Instance**
 Once the snapshot(s) are mounted and networking is set up, test the new EC2 instance to ensure it is functioning properly. Verify that all services are running, and that the applications are configured correctly.
