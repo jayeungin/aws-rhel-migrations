@@ -1,5 +1,5 @@
 ---
-- name: Duplicate EC2 instance with EBS snapshot, remount, tag copy, package transfer using dnf, and IP assignment
+- name: Duplicate EC2 instance with EBS snapshot, remount, tag copy, and IP assignment
   hosts: localhost
   gather_facts: no
   vars:
