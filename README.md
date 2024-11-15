@@ -72,18 +72,19 @@ This playbook duplicates an EC2 instance with EBS snapshot, remount, tag copy, a
 ### Pre-requisites
 The playbook assumes that the Ansible user has the necessary AWS credentials and permissions to create EC2 instances, EBS snapshots, and assign IP addresses.
 
+### Disclaimer
+**This playbook has not been tested and should be tested against test workloads beforehand.**
+
 ### Task Explanations
-1. Gather info about a running EC2 instance using instance-id and store as variables: This task uses the ec2_instance_info module to gather information about the source EC2 instance, including its block device mappings, instance type, availability zone, security groups, and tags. The task stores this information as variables for use in subsequent tasks.
-2. Snapshot the EBS volumes for the running EC2: This task uses the ec2_snapshot module to create EBS snapshots of the source EC2 instance's block devices. The task only runs when the device name matches the regular expression /dev/sd[b-z], which selects only the EBS volumes attached to the instance's root device.
-3. Create a new EC2 instance using a different ami and matching instance info as the running EC2: This task uses the ec2_instance module to create a new EC2 instance using a different AMI and matching instance information as the source EC2 instance. The task assigns a new name, Environment, and a new tag to the new EC2 instance. The task also configures the new EC2 instance to use the same EBS volumes as the source EC2 instance.
-4. Assign source networking to the new EC2 instance: This task uses the ec2_network_interface module to assign the source EC2 instance's private IP address and subnet to the new EC2 instance.
-5. Turn off the original EC2: This task uses the ec2_instance module to stop the source EC2 instance.
-6. Remount the EBS volumes to the new EC2: This task uses the ec2_vol module to remount the EBS volumes from the source EC2 instance to the new EC2 instance.
-7. Turn on the new EC2: This task uses the ec2_instance module to start the new EC2 instance.
-8. Output the original EC2 information and the new EC2 information: This task uses the debug module to output the original EC2 information and the new EC2 information to the Ansible learner's terminal. The debug module is useful for troubleshooting and understanding the playbook's behavior.
+   1. **Gather info about a running EC2 instance using instance-id and store as variables:** This task uses the ec2_instance_info module to gather information about the source EC2 instance, including its block device mappings, instance type, availability zone, security groups, and tags. The task stores this information as variables for use in subsequent tasks.
+   2. **Snapshot the EBS volumes for the running EC2:** This task uses the ec2_snapshot module to create EBS snapshots of the source EC2 instance's block devices. The task only runs when the device name matches the regular expression /dev/sd[b-z], which selects only the EBS volumes attached to the instance's root device.
+   3. **Create a new EC2 instance using a different ami and matching instance info as the running EC2:** This task uses the ec2_instance module to create a new EC2 instance using a different AMI and matching instance information as the source EC2 instance. The task assigns a new name, Environment, and a new tag to the new EC2 instance. The task also configures the new EC2 instance to use the same EBS volumes as the source EC2 instance.
+   4. **Assign source networking to the new EC2 instance:** This task uses the ec2_network_interface module to assign the source EC2 instance's private IP address and subnet to the new EC2 instance.
+   5. **Turn off the original EC2:** This task uses the ec2_instance module to stop the source EC2 instance.
+   6. **Remount the EBS volumes to the new EC2:** This task uses the ec2_vol module to remount the EBS volumes from the source EC2 instance to the new EC2 instance.
+   7. **Turn on the new EC2:** This task uses the ec2_instance module to start the new EC2 instance.
+   8. **Output the original EC2 information and the new EC2 information:** This task uses the debug module to output the original EC2 information and the new EC2 information to the Ansible learner's terminal. The debug module is useful for troubleshooting and understanding the playbook's behavior.
 
 # Final Notes:
 - If you're moving to a different version of RHEL in the marketplace, be sure to check compatibility with your applications and configurations.
-- If you're using AWS services like Auto Scaling or Elastic Load Balancing, make sure the new instance is properly integrated into those services.
-
-This approach will give you a smooth migration from an On-Demand RHEL EC2 instance to a Marketplace RHEL EC2 instance.
+- If you're using other AWS services like Auto Scaling or Elastic Load Balancing, make sure the new instance is properly integrated into those services.
